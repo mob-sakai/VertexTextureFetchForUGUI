@@ -10,8 +10,25 @@ using Random = UnityEngine.Random;
 
 public class ByteArrayToTexture : MonoBehaviour
 {
+
+	//################################
+	// Serialize Members.
+	//################################
 	[SerializeField] Dropdown dropDownWidth;
 	[SerializeField] Dropdown dropDownHeight;
+	[SerializeField] Toggle toggleEveryFrame;
+	[SerializeField] RawImage target;
+	[SerializeField] RenderTexture rt;
+	[SerializeField] Texture2D texture;
+	[SerializeField] Material material;
+
+	private void Update()
+	{
+		if(toggleEveryFrame.isOn)
+		{
+			SetTextureColorsToRandom();
+		}
+	}
 
 	public void SetTextureColorsToRandom ()
 	{
@@ -148,72 +165,27 @@ public class ByteArrayToTexture : MonoBehaviour
 		Profiler.EndSample ();
 
 		Profiler.BeginSample ("TEST: AddCommandBuffer");
-		renderCamera.AddCommandBuffer (CameraEvent.BeforeForwardOpaque, cb);
+		renderCamera.AddCommandBuffer (CameraEvent.AfterImageEffects, cb);
 		Profiler.EndSample ();
-
-		yield return new WaitForSeconds (5);
+		
 		yield return new WaitForEndOfFrame ();
 
-		renderCamera.RemoveCommandBuffer (CameraEvent.BeforeForwardOpaque, cb);
+		renderCamera.RemoveCommandBuffer (CameraEvent.AfterImageEffects, cb);
 		cb.Dispose ();
 		cb = null;
 	}
 
-	//	Mesh renderingMesh;
-	//	Color[] colorArray = new Color[size];
-	//	public Texture2D texture;
-	//	public int resolution;
-	//	public Vector2 dimension;
 
-	//	public void FloatTexture (Color[] array)
-	//	{
-	//		resolution = (int)Utils.GetNearestPowerOfTwo (Mathf.Sqrt (array.Length));
-	//		texture = new Texture2D (resolution, resolution, TextureFormat.RGBAFloat, false);
-	//		texture.filterMode = FilterMode.Point;
-	//		colorArray = new Color[resolution * resolution];
-	//		dimension = new Vector2 (resolution, resolution);
-	//		PrintColor (array);
-	//	}
-	//
-	//	public void PrintColor (Color[] array)
-	//	{
-	//		if (texture != null) {
-	//			for (int i = 0; i < array.Length; ++i) {
-	//				colorArray [i].r = array [i].r;
-	//				colorArray [i].g = array [i].g;
-	//				colorArray [i].b = array [i].b;
-	//				colorArray [i].a = array [i].a;
-	//			}
-	//			texture.SetPixels (colorArray);
-	//			texture.Apply ();
-	//		}
-	//	}
+	Camera renderCamera { get { return target.canvas.worldCamera ?? Camera.main; } }
 
-	//	MeshFilter meshFilter;
-	//	MeshRenderer meshRenderer;
-
-	[SerializeField] RenderTexture rt;
-	[SerializeField] Texture2D texture;
-
-
-	Camera renderCamera{ get { return target.canvas.worldCamera ?? Camera.main; } }
-
-	[SerializeField] RawImage target;
 
 	CommandBuffer cb;
 
-	//	public Mesh meshQuads;
-	//	public Mesh meshTris;
 	Mesh mesh;
-	[SerializeField] Material material;
 
 
-
-	//	const int size = 1024;
-	//	Vector3[] verts = new Vector3[size * 4];
 	Color32[] colors32;
 	Color[] colors;
-	//	int[] tris = new int[size * 6];
 
 
 	public static void SetColorsToRGB (Color32[] cols)
@@ -222,9 +194,6 @@ public class ByteArrayToTexture : MonoBehaviour
 		var r = new Color32 (255, 0, 0, 255);
 		var g = new Color32 (0, 255, 0, 255);
 		var b = new Color32 (0, 0, 255, 255);
-//		var r = Color.red;
-//		var g = Color.green;
-//		var b = Color.blue;
 		int dim = cols.Length % 3 == 0 ? 3 : 4; 
 		for (int i = 0; i < cols.Length; i += dim) {
 			var c = rgb % 3 == 0 ? r : rgb % 3 == 1 ? g : b;
@@ -233,19 +202,6 @@ public class ByteArrayToTexture : MonoBehaviour
 			}
 			rgb++;
 		}
-//		for (int i = 0; i < cols.Length; i += 4) {
-//			switch (i % 3) {
-//			case 0:
-//				cols [i + 0] = cols [i + 1] = cols [i + 2] = cols [i + 3] = r;
-//				break;
-//			case 1:
-//				cols [i + 0] = cols [i + 1] = cols [i + 2] = cols [i + 3] = g;
-//				break;
-//			case 2:
-//				cols [i + 0] = cols [i + 1] = cols [i + 2] = cols [i + 3] = b;
-//				break;
-//			}
-//		}
 	}
 
 	public static void SetColorsToRGB (Color[] cols)
@@ -259,19 +215,6 @@ public class ByteArrayToTexture : MonoBehaviour
 			cols [i] = c;
 			rgb++;
 		}
-//		for (int i = 0; i < cols.Length; i += 4) {
-//			switch (i % 3) {
-//			case 0:
-//				cols [i + 0] = cols [i + 1] = cols [i + 2] = cols [i + 3] = r;
-//				break;
-//			case 1:
-//				cols [i + 0] = cols [i + 1] = cols [i + 2] = cols [i + 3] = g;
-//				break;
-//			case 2:
-//				cols [i + 0] = cols [i + 1] = cols [i + 2] = cols [i + 3] = b;
-//				break;
-//			}
-//		}
 	}
 
 	public static void SetColorsToRandom (Color[] cols)
@@ -280,14 +223,6 @@ public class ByteArrayToTexture : MonoBehaviour
 			var c = new Color (UnityEngine.Random.value, UnityEngine.Random.value, UnityEngine.Random.value, 1);
 			cols [i] = c;
 		}
-//		for (int i = 0; i < cols.Length; ) {
-//			var c = new Color (UnityEngine.Random.value, UnityEngine.Random.value, UnityEngine.Random.value, 1);
-//			for (; i < dim; i++)
-//			{
-//				cols [i] = c;
-//			}
-////			cols [i + 0] = cols [i + 1] = cols [i + 2] = cols [i + 3] = new Color (UnityEngine.Random.value, UnityEngine.Random.value, UnityEngine.Random.value, 1);
-//		}
 	}
 
 	public static void SetColorsToRandom (Color32[] cols)
@@ -301,28 +236,7 @@ public class ByteArrayToTexture : MonoBehaviour
 				cols [i + j] = c;
 			}
 		}
-//		for (int i = 0; i < cols.Length; ) {
-//			for (; i < dim; i++)
-//			{
-//				cols [i] = c;
-//			}
-//		}
-//		for (int i = 0; i < cols.Length; i += 4) {
-//			cols [i + 0] =
-//				cols [i + 1] =
-//					cols [i + 2] =
-//						cols [i + 3] =
-//							new Color32 ((byte)UnityEngine.Random.Range (0, 256), (byte)UnityEngine.Random.Range (0, 256), (byte)UnityEngine.Random.Range (0, 256), 255);
-//		}
 	}
-
-	//	public static void SetColor (ref Color32 col, byte r, byte g, byte b, byte a)
-	//	{
-	//		col.r = r;
-	//		col.g = g;
-	//		col.b = b;
-	//		col.a = a;
-	//	}
 
 	public static Color32[] GenerateMeshQuad (out Mesh mesh, int width, int height)
 	{
@@ -361,6 +275,8 @@ public class ByteArrayToTexture : MonoBehaviour
 		mesh.vertices = verts;
 		mesh.triangles = tris;
 		mesh.colors32 = cols;
+
+		mesh.RecalculateNormals();
 
 		return cols;
 	}
