@@ -17,6 +17,7 @@ public class ByteArrayToTexture : MonoBehaviour
 	[SerializeField] Dropdown dropDownWidth;
 	[SerializeField] Dropdown dropDownHeight;
 	[SerializeField] Toggle toggleEveryFrame;
+	[SerializeField] Text textLog;
 	[SerializeField] RawImage target;
 	[SerializeField] RenderTexture rt;
 	[SerializeField] Texture2D texture;
@@ -72,7 +73,9 @@ public class ByteArrayToTexture : MonoBehaviour
 		// 解像度.
 		int w = int.Parse (dropDownWidth.options [dropDownWidth.value].text);
 		int h = int.Parse (dropDownHeight.options [dropDownHeight.value].text);
-		Debug.LogFormat ("UpdateTextureBySetPixels {0}x{1}", w, h);
+		string log = string.Format("UpdateTextureBySetPixels {0}x{1}", w, h);
+		textLog.text = log;
+		Debug.Log (log);
 
 		// 解像度が違う場合、リサイズ.
 		if (texture && (texture.width != w || texture.width != h)) {
@@ -115,7 +118,10 @@ public class ByteArrayToTexture : MonoBehaviour
 		// 現在の解像度.
 		int w = int.Parse (dropDownWidth.options [dropDownWidth.value].text);
 		int h = int.Parse (dropDownHeight.options [dropDownHeight.value].text);
-		Debug.LogFormat ("UpdateTextureByCommandBuffer {0}x{1} tri:{2} vertex:{3}", w, h, tri, tri ? w * h * 3 : w * h * 4);
+
+		string log = string.Format("UpdateTextureByCommandBuffer {0}x{1} tri:{2} vertex:{3}", w, h, tri, tri ? w * h * 3 : w * h * 4);
+		textLog.text = log;
+		Debug.Log(log);
 
 		// 解像度が違う場合、古いRTを削除.
 		if (rt && (rt.width != w || rt.width != h)) {
