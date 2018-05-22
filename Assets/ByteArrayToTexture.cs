@@ -165,12 +165,12 @@ public class ByteArrayToTexture : MonoBehaviour
 		Profiler.EndSample ();
 
 		Profiler.BeginSample ("TEST: AddCommandBuffer");
-		renderCamera.AddCommandBuffer (CameraEvent.AfterImageEffects, cb);
+		renderCamera.AddCommandBuffer (CameraEvent.BeforeForwardOpaque, cb);
 		Profiler.EndSample ();
 		
 		yield return new WaitForEndOfFrame ();
 
-		renderCamera.RemoveCommandBuffer (CameraEvent.AfterImageEffects, cb);
+		renderCamera.RemoveCommandBuffer (CameraEvent.BeforeForwardOpaque, cb);
 		cb.Dispose ();
 		cb = null;
 	}

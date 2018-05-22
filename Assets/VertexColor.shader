@@ -1,10 +1,23 @@
-﻿Shader "Unlit/VertColor"
+﻿Shader "Unlit/VertexColor"
 {
 	Properties
 	{
 	}
 	SubShader
 	{
+		Tags
+		{
+			"Queue" = "Background"
+			"IgnoreProjector" = "True"
+			"RenderType" = "Opaque"
+			"PreviewType" = "Plane"
+		}
+
+		LOD 100
+		Cull Off
+		Lighting Off
+		ZWrite Off
+
 		Pass
 		{
 			CGPROGRAM
