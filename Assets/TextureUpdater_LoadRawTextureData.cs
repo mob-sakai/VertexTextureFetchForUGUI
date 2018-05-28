@@ -9,7 +9,7 @@ public class TextureUpdater_LoadRawTextureData : TextureUpdater
 	public override Texture texture { get; protected set; }
 
 //	byte[] colorBytes = new byte[Width * Height * 32];
-	byte[][] colorsrnd = new byte[10][];
+	byte[][] colorsrnd = new byte[RandomCache][];
 	byte[] colorsrgb;
 
 	void Start()
@@ -23,7 +23,7 @@ public class TextureUpdater_LoadRawTextureData : TextureUpdater
 
 	public override void SetRandom()
 	{
-		int i = Time.frameCount % 10;
+		int i = Time.frameCount % RandomCache;
 		SetColorsToRandom(ref colorsrnd[i]);
 		UpdateTexture(texture as Texture2D, colorsrnd[i]);
 	}
@@ -73,13 +73,18 @@ public class TextureUpdater_LoadRawTextureData : TextureUpdater
 			return;
 		cols = new byte[Width * Height * 4];
 
+		Profiler.BeginSample("TEST: SetColorsToRandom");
 		for (int i = 0; i < cols.Length; i += 4)
 		{
 			cols[i + 0] = 255;
-			cols[i + 1] = (byte)Random.Range(0, 256);
-			cols[i + 2] = (byte)Random.Range(0, 256);
-			cols[i + 3] = (byte)Random.Range(0, 256);
+			cols[i + 1] = (byte)(i * 255/cols.Length);
+			cols[i + 2] = (byte)(i * 255/cols.Length);
+			cols[i + 3] = (byte)(i * 255/cols.Length);
+			//cols[i + 1] = (byte)Random.Range(0, 256);
+			//cols[i + 2] = (byte)Random.Range(0, 256);
+			//cols[i + 3] = (byte)Random.Range(0, 256);
 		}
+		Profiler.EndSample();
 	}
 
 }

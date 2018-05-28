@@ -9,7 +9,7 @@ public class TextureUpdater_SetPixels : TextureUpdater
 	public override Texture texture { get; protected set; }
 
 	//	Color[] colors = new Color[Width * Height];
-	Color[][] colorsrnd = new Color[10][];
+	Color[][] colorsrnd = new Color[RandomCache][];
 	Color[] colorsrgb;
 
 	void Start()
@@ -24,7 +24,7 @@ public class TextureUpdater_SetPixels : TextureUpdater
 
 	public override void SetRandom()
 	{
-		int i = Time.frameCount % 10;
+		int i = Time.frameCount % RandomCache;
 		SetColorsToRandom(ref colorsrnd[i]);
 		UpdateTexture(texture as Texture2D, colorsrnd[i]);
 	}
@@ -74,10 +74,12 @@ public class TextureUpdater_SetPixels : TextureUpdater
 			return;
 		cols = new Color[Width * Height];
 
+		Profiler.BeginSample("TEST: SetColorsToRandom");
 		for (int i = 0; i < cols.Length; i++)
 		{
-			var c = new Color(UnityEngine.Random.value, UnityEngine.Random.value, UnityEngine.Random.value, 1);
+			var c = new Color((float)i/cols.Length, (float)i/cols.Length, (float)i/cols.Length, 1);
 			cols[i] = c;
 		}
+		Profiler.EndSample();
 	}
 }

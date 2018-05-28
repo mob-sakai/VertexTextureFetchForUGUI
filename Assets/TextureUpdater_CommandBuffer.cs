@@ -13,7 +13,7 @@ public class TextureUpdater_CommandBuffer : TextureUpdater
 
 	
 	Color32[] colors32rgb;
-	Color32[][] colors32rnd = new Color32[10][];
+	Color32[][] colors32rnd = new Color32[RandomCache][];
 	Mesh mesh;
 
 	void Start()
@@ -64,7 +64,7 @@ public class TextureUpdater_CommandBuffer : TextureUpdater
 
 	public override void SetRandom()
 	{
-		int i = Time.frameCount % 10;
+		int i = Time.frameCount % RandomCache;
 		SetColorsToRandom(ref colors32rnd[i]);
 		
 		StartCb(colors32rnd[i]);

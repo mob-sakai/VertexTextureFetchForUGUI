@@ -7,8 +7,8 @@ public class TextureUpdater_SetPixels32 : TextureUpdater
 {
 	public override Texture texture { get; protected set; }
 
-	Color32[] colors32rgb = new Color32[Width * Height];
-	Color32[][] colors32rnd = new Color32[10][];
+	Color32[] colors32rgb;
+	Color32[][] colors32rnd = new Color32[RandomCache][];
 
 	void Start()
 	{
@@ -21,7 +21,7 @@ public class TextureUpdater_SetPixels32 : TextureUpdater
 
 	public override void SetRandom()
 	{
-		int i = Time.frameCount % 10;
+		int i = Time.frameCount % RandomCache;
 		SetColorsToRandom(ref colors32rnd[i]);
 		UpdateTexture(texture as Texture2D, colors32rnd[i]);
 	}
@@ -58,14 +58,9 @@ public class TextureUpdater_SetPixels32 : TextureUpdater
 		var r = new Color32(255, 0, 0, 255);
 		var g = new Color32(0, 255, 0, 255);
 		var b = new Color32(0, 0, 255, 255);
-		int dim = cols.Length % 3 == 0 ? 3 : 4; 
-		for (int i = 0; i < cols.Length; i += dim)
+		for (int i = 0; i < cols.Length; i++)
 		{
-			var c = rgb % 3 == 0 ? r : rgb % 3 == 1 ? g : b;
-			for (int j = 0; j < dim; j++)
-			{
-				cols[i + j] = c;
-			}
+			cols[i] = rgb % 3 == 0 ? r : rgb % 3 == 1 ? g : b;
 			rgb++;
 		}
 	}
@@ -77,9 +72,12 @@ public class TextureUpdater_SetPixels32 : TextureUpdater
 		
 		cols = new Color32[Width * Height];
 
+		Profiler.BeginSample("TEST: SetColorsToRandom");
 		for (int i = 0; i < cols.Length; i++)
 		{
-			cols[i] = new Color32((byte)Random.Range(0, 256), (byte)Random.Range(0, 256), (byte)Random.Range(0, 256), 255);
+			//cols[i] = new Color32((byte)Random.Range(0, 256), (byte)Random.Range(0, 256), (byte)Random.Range(0, 256), 255);
+			cols[i] = new Color32((byte)(i * 255/cols.Length),(byte)(i * 255/cols.Length),(byte)(i * 255/cols.Length), 255);
 		}
+		Profiler.EndSample();
 	}
 }
