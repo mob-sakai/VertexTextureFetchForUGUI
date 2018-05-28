@@ -1,11 +1,11 @@
 {
-  "name": "VetexTextureFetchForuGUI",
+  "name": "VertexTextureFetchForuGUI",
   "version": "0.1.0",
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/mob-sakai/VetexTextureFetchForuGUI.git"
+    "url": "git+https://github.com/mob-sakai/VertexTextureFetchForuGUI.git"
   },
-  "src": "Assets/VetexTextureFetchForuGUI",
+  "src": "Assets/VertexTextureFetchForuGUI",
   "unity": "/Applications/Unity/Hub/Editor/5.5.0p4/Unity.app/Contents/MacOS/Unity",
   "license": "MIT"
 }

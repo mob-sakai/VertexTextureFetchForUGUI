@@ -1,4 +1,4 @@
-VetexTextureFetchForUGUI
+VertexTextureFetchForUGUI
 ===
 
 Compare method to generate parameter texture.
@@ -10,4 +10,4 @@ Compare method to generate parameter texture.
 
 ### Demo
 
-http://mob-sakai.github.io/VetexTextureFetchForUGUI
+http://mob-sakai.github.io/VertexTextureFetchForUGUI
