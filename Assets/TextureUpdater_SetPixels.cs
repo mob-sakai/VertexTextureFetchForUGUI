@@ -5,7 +5,7 @@ using UnityEngine.Profiling;
 
 public class TextureUpdater_SetPixels32 : TextureUpdater
 {
-	public override Texture2D texture { get; protected set; }
+	public override Texture texture { get; protected set; }
 
 	Color32[] colors32rgb = new Color32[Width * Height];
 	Color32[][] colors32rnd = new Color32[10][];
@@ -23,13 +23,17 @@ public class TextureUpdater_SetPixels32 : TextureUpdater
 	{
 		int i = Time.frameCount % 10;
 		SetColorsToRandom(ref colors32rnd[i]);
-		UpdateTexture(texture, colors32rnd[i]);
+		UpdateTexture(texture as Texture2D, colors32rnd[i]);
 	}
 
 	public override void SetRgb()
 	{
 		SetColorsToRGB(ref colors32rgb);
-		UpdateTexture(texture, colors32rgb);
+		UpdateTexture(texture as Texture2D, colors32rgb);
+	}
+	
+	public override void Stop()
+	{
 	}
 
 	static void UpdateTexture(Texture2D tex, Color32[] cols)
@@ -39,7 +43,7 @@ public class TextureUpdater_SetPixels32 : TextureUpdater
 		Profiler.EndSample();
 
 		Profiler.BeginSample("TEST: Apply");
-		tex.Apply();
+		tex.Apply(false, false);
 		Profiler.EndSample();
 	}
 

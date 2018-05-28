@@ -6,7 +6,7 @@ using UnityEngine.Profiling;
 public class TextureUpdater_SetPixels : TextureUpdater
 {
 
-	public override Texture2D texture { get; protected set; }
+	public override Texture texture { get; protected set; }
 
 	//	Color[] colors = new Color[Width * Height];
 	Color[][] colorsrnd = new Color[10][];
@@ -26,13 +26,17 @@ public class TextureUpdater_SetPixels : TextureUpdater
 	{
 		int i = Time.frameCount % 10;
 		SetColorsToRandom(ref colorsrnd[i]);
-		UpdateTexture(texture, colorsrnd[i]);
+		UpdateTexture(texture as Texture2D, colorsrnd[i]);
 	}
 
 	public override void SetRgb()
 	{
 		SetColorsToRGB(ref colorsrgb);
-		UpdateTexture(texture, colorsrgb);
+		UpdateTexture(texture as Texture2D, colorsrgb);
+	}
+	
+	public override void Stop()
+	{
 	}
 
 	static void UpdateTexture(Texture2D tex, Color[] cols)
@@ -42,7 +46,7 @@ public class TextureUpdater_SetPixels : TextureUpdater
 		Profiler.EndSample();
 
 		Profiler.BeginSample("TEST: Apply");
-		tex.Apply();
+		tex.Apply(false, false);
 		Profiler.EndSample();
 	}
 
@@ -69,7 +73,7 @@ public class TextureUpdater_SetPixels : TextureUpdater
 		if (cols != null)
 			return;
 		cols = new Color[Width * Height];
-		
+
 		for (int i = 0; i < cols.Length; i++)
 		{
 			var c = new Color(UnityEngine.Random.value, UnityEngine.Random.value, UnityEngine.Random.value, 1);
