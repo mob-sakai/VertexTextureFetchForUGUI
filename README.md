@@ -17,7 +17,7 @@ Compare method to generate parameter texture.
 http://mob-sakai.github.io/VertexTextureFetchForUGUI
 
 
-去年発売のAndroidで計測
+去年発売のAndroidで計測し
 ```
 1024x256 ARGB32
 SetPixel            10.0 ms
@@ -45,5 +45,7 @@ Mesh.set_colors32    0.3 ms
 CommandBuffer(GPU)   1.5 ms
 ```
 
-コマンドバッファは1ドットあたり3頂点割当て(Triangle)
-かかる時間としては LoadRawTextureData <<< SetPixel32 <<<<<<< SetPixel <<<<<<<<<<<<< CommandBuffer
+コマンドバッファは1ドットあたり3頂点割当て(Triangle).
+
+かかる時間:
+LoadRawTextureData <<< SetPixel32 <<<<<<< SetPixel <<<<<<<<<<<<< CommandBuffer
