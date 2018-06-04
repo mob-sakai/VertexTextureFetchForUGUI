@@ -74,15 +74,14 @@ public class TextureUpdater_LoadRawTextureData : TextureUpdater
 		cols = new byte[Width * Height * 4];
 
 		Profiler.BeginSample("TEST: SetColorsToRandom");
+		byte c;
 		for (int i = 0; i < cols.Length; i += 4)
 		{
+			c = (byte)(i * 255 / cols.Length);
 			cols[i + 0] = 255;
-			cols[i + 1] = (byte)(i * 255/cols.Length);
-			cols[i + 2] = (byte)(i * 255/cols.Length);
-			cols[i + 3] = (byte)(i * 255/cols.Length);
-			//cols[i + 1] = (byte)Random.Range(0, 256);
-			//cols[i + 2] = (byte)Random.Range(0, 256);
-			//cols[i + 3] = (byte)Random.Range(0, 256);
+			cols[i + 1] = c;
+			cols[i + 2] = c;
+			cols[i + 3] = c;
 		}
 		Profiler.EndSample();
 	}

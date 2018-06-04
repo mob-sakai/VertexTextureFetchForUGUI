@@ -43,6 +43,7 @@ public class TextureUpdater_CommandBuffer : TextureUpdater
 
 		Profiler.BeginSample ("TEST: Create CB");
 		cb = new CommandBuffer ();
+		cb.name = "TEST: Draw";
 		cb.SetRenderTarget (new RenderTargetIdentifier (texture as RenderTexture));
 		Profiler.EndSample ();
 
@@ -115,18 +116,6 @@ public class TextureUpdater_CommandBuffer : TextureUpdater
 		Camera.main.RemoveCommandBuffer (CameraEvent.BeforeForwardOpaque, cb);
 		cb = null;
 	}
-
-	static void UpdateTexture(Texture2D tex, Color32[] cols)
-	{
-		Profiler.BeginSample("TEST: SetPixels32");
-		tex.SetPixels32(cols);
-		Profiler.EndSample();
-
-		Profiler.BeginSample("TEST: Apply");
-		tex.Apply(false, false);
-		Profiler.EndSample();
-	}
-
 
 	static void SetColorsToRGB(ref Color32[] cols)
 	{

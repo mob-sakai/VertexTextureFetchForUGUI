@@ -3,12 +3,14 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.Profiling;
 
-public class TextureUpdater_SetPixels32 : TextureUpdater
+public class TextureUpdater_SetPixels : TextureUpdater
 {
+
 	public override Texture texture { get; protected set; }
 
-	Color32[] colors32rgb;
-	Color32[][] colors32rnd = new Color32[RandomCache][];
+	//	Color[] colors = new Color[Width * Height];
+	Color[][] colorsrnd = new Color[RandomCache][];
+	Color[] colorsrgb;
 
 	void Start()
 	{
@@ -19,27 +21,28 @@ public class TextureUpdater_SetPixels32 : TextureUpdater
 	}
 
 
+
 	public override void SetRandom()
 	{
 		int i = Time.frameCount % RandomCache;
-		SetColorsToRandom(ref colors32rnd[i]);
-		UpdateTexture(texture as Texture2D, colors32rnd[i]);
+		SetColorsToRandom(ref colorsrnd[i]);
+		UpdateTexture(texture as Texture2D, colorsrnd[i]);
 	}
 
 	public override void SetRgb()
 	{
-		SetColorsToRGB(ref colors32rgb);
-		UpdateTexture(texture as Texture2D, colors32rgb);
+		SetColorsToRGB(ref colorsrgb);
+		UpdateTexture(texture as Texture2D, colorsrgb);
 	}
 	
 	public override void Stop()
 	{
 	}
 
-	static void UpdateTexture(Texture2D tex, Color32[] cols)
+	static void UpdateTexture(Texture2D tex, Color[] cols)
 	{
-		Profiler.BeginSample("TEST: SetPixels32");
-		tex.SetPixels32(cols);
+		Profiler.BeginSample("TEST: SetPixels");
+		tex.SetPixels(cols);
 		Profiler.EndSample();
 
 		Profiler.BeginSample("TEST: Apply");
@@ -47,36 +50,36 @@ public class TextureUpdater_SetPixels32 : TextureUpdater
 		Profiler.EndSample();
 	}
 
-
-	static void SetColorsToRGB(ref Color32[] cols)
+	public static void SetColorsToRGB(ref Color[] cols)
 	{
 		if (cols != null)
 			return;
-		cols = new Color32[Width * Height];
-			
+		cols = new Color[Width * Height];
+
 		int rgb = 0;
-		var r = new Color32(255, 0, 0, 255);
-		var g = new Color32(0, 255, 0, 255);
-		var b = new Color32(0, 0, 255, 255);
+		var r = Color.red;
+		var g = Color.green;
+		var b = Color.blue;
 		for (int i = 0; i < cols.Length; i++)
 		{
-			cols[i] = rgb % 3 == 0 ? r : rgb % 3 == 1 ? g : b;
+			var c = rgb % 3 == 0 ? r : rgb % 3 == 1 ? g : b;
+			cols[i] = c;
 			rgb++;
 		}
 	}
 
-	static void SetColorsToRandom(ref Color32[] cols)
+	public static void SetColorsToRandom(ref Color[] cols)
 	{
 		if (cols != null)
 			return;
-		
-		cols = new Color32[Width * Height];
+		cols = new Color[Width * Height];
 
 		Profiler.BeginSample("TEST: SetColorsToRandom");
+		Color c = new Color(0,0,0,1);
 		for (int i = 0; i < cols.Length; i++)
 		{
-			//cols[i] = new Color32((byte)Random.Range(0, 256), (byte)Random.Range(0, 256), (byte)Random.Range(0, 256), 255);
-			cols[i] = new Color32((byte)(i * 255/cols.Length),(byte)(i * 255/cols.Length),(byte)(i * 255/cols.Length), 255);
+			c.r = c.g = c.b = (float)i / cols.Length;
+			cols[i] = c;
 		}
 		Profiler.EndSample();
 	}
